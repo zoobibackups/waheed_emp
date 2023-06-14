@@ -48,7 +48,6 @@ const SignInScreen = ({navigation}) => {
       email_address: email_address.trim(),
       userpassword: password,
       type: 'candidate',
-      dd: 'dd',
     };
     candidateLogin(data)
       .then(response => {
