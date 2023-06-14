@@ -90,6 +90,7 @@ const AddWeeklySummary = ({
               keyExtractor={(item, index) => index.toString()}
               renderItem={({item, index}) => {
                 let local_edit = false;
+
                 if (alldata[maindex].length === 1) {
                   local_edit = job_working_days.some(
                     item =>
@@ -141,7 +142,7 @@ const AddWeeklySummary = ({
                 return (
                   <TimeInput
                     item={item}
-                    editable={true}
+                    editable={local_edit}
                     index={index}
                     setHours={(i, d) => setHours(i, d, maindex)}
                   />

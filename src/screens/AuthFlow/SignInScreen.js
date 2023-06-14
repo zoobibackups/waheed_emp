@@ -21,7 +21,7 @@ import {commonStyles, textStyles} from '../../styles';
 const SignInScreen = ({navigation}) => {
   const [email_address, setUseremail] = useState('rajan13506@farebus.com'); // niveba2588@shbiso.com
   const [UseremailErrorMesage, setUseremailErrorMessaage] = useState('');
-  const [password, setPassword] = useState(''); //123456
+  const [password, setPassword] = useState('123456'); //123456
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [is_api_error, set_api_error] = useState('');
   const [apiErrorMessage, setApiErrorMessage] = useState('');
