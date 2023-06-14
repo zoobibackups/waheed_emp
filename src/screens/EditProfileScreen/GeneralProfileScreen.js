@@ -22,6 +22,7 @@ import {
 } from 'react-native-responsive-screen';
 import {scale, verticalScale} from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../components/Button';
 import RenderHTMLComponent from '../../components/RenderHtmlText';
@@ -101,6 +102,54 @@ const CreateEducationItem = ({item, index}) => {
   );
 };
 
+const CreateCertificationItem = ({item, index}) => {
+  console.log(item);
+  return (
+    <View key={`${index}`} style={styles.EducationMainView}>
+      <View style={styles.ImageView}>
+        <FontAwesome5
+          color={colors.dark_primary_color}
+          name={'medal'}
+          size={scale(40)}
+        />
+      </View>
+      <View style={{marginLeft: scale(15), width: '80%'}}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'middle'}
+          style={styles.job_tiltetext}>
+          {item.certificate_type}
+        </Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'middle'}
+          style={styles.Addresstext}>
+          {item.certification_name} - {item.certification_no}
+        </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.date}>{item.expiry_date}</Text>
+          <Text style={{...styles.date, marginRight: scale(0)}}>-</Text>
+          <Text
+            style={{
+              ...styles.date,
+              color: '#fff',
+              width: 75,
+              textAlign: 'center',
+              borderRadius: 4,
+
+              marginLeft: scale(10),
+              backgroundColor: moment().isAfter(moment(item.expiry_date))
+                ? 'red'
+                : 'green',
+            }}>
+            {' '}
+            {moment().isAfter(moment(item.expiry_date)) ? 'Expire' : 'Valid'}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+};
 ExperienceSection = ({data}) => {
   return (
     <View style={{}}>
@@ -164,6 +213,38 @@ EducationSection = ({data}) => {
     </View>
   );
 };
+
+CertificationSection = ({data}) => {
+  return (
+    <View style={{}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+
+          marginTop: verticalScale(10),
+        }}>
+        <Text
+          style={{
+            fontSize: scale(16),
+            fontFamily: fonts.Medium,
+            color: '#343434',
+          }}>
+          Certifications
+        </Text>
+      </View>
+      {data.map((item, index) => {
+        return (
+          <CreateCertificationItem
+            key={`${index}`}
+            index={`${index}`}
+            item={item}
+          />
+        );
+      })}
+    </View>
+  );
+};
 const GeneralProfileScreen = ({navigation}) => {
   const {user} = useSelector(state => state.LoginReducer);
   const initialState = {
@@ -180,7 +261,7 @@ const GeneralProfileScreen = ({navigation}) => {
   const [is_Editabe, setisEditable] = useState(false);
   const [experiences, setExperiences] = useState(null);
   const [educations, setEducation] = useState(null);
-
+  const [certifications, setCertifications] = useState(null);
   function reducer(state, action) {
     switch (action.type) {
       case 'firstName':
@@ -203,7 +284,7 @@ const GeneralProfileScreen = ({navigation}) => {
   useEffect(() => {
     getExperience();
     getEducation();
-    // getCertificate();
+    getCertificate();
   }, []);
 
   const getExperience = () => {
@@ -246,6 +327,25 @@ const GeneralProfileScreen = ({navigation}) => {
       });
   };
 
+  const getCertificate = () => {
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `https://api.recruitbpm.com/certifications`,
+      headers: {
+        Authorization: 'Bearer 4545980ce66bd555d903f7dc739f91e631606eb1',
+      },
+    };
+
+    axios
+      .request(config)
+      .then(response => {
+        setCertifications(response.data._embedded.Certifications.slice(0, 4));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
   const UpdateUserProfile = () => {
     let data = {
       user_id: user.candidate_id,
@@ -358,6 +458,9 @@ const GeneralProfileScreen = ({navigation}) => {
                 }}></Text>
               {experiences != null && <ExperienceSection data={experiences} />}
               {educations != null && <EducationSection data={educations} />}
+              {certifications != null && (
+                <CertificationSection data={certifications} />
+              )}
             </View>
           </ScrollView>
         </View>
@@ -373,6 +476,7 @@ const GeneralProfileScreen = ({navigation}) => {
       </SafeAreaView>
     );
   }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

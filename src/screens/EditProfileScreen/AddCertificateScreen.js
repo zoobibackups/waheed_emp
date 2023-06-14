@@ -18,11 +18,12 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import {scale} from 'react-native-size-matters';
+import {moderateScale, scale} from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useSelector} from 'react-redux';
 import CustomButton from '../../components/Button';
 import CalenderInput from '../../components/DateInputMethod';
+import Spacer from '../../components/Spacer';
 import CustomTextInput from '../../components/TextInput';
 import {AppScreenWidth} from '../../constants/sacling';
 import {colors, fonts} from '../../constants/theme';
@@ -65,6 +66,9 @@ const AddCertificateScreen = ({navigation}) => {
 
     var data = JSON.stringify({
       candidate_id: user.candidate_id,
+      account_id: user.account_id,
+      user_id: user.candidate_id,
+      certification_id: '1',
       certification_no: certificateData.certification_no,
       credentials: certificateData.credentials,
       expiry_date: certificateData.expiry_date,
@@ -101,17 +105,11 @@ const AddCertificateScreen = ({navigation}) => {
     <SafeAreaView style={{flex: 1, backgroundColor: colors.dark_primary_color}}>
       <StatusBar barStyle={'light-content'} />
       <View style={commonStyles.container}>
-        <CustomTextInput
-          placeholder={'Certificate Number'}
-          value={certificateData.certification_no}
-          borderWidth={1}
-          lableColor={colors.dark_primary_color}
-          borderRadius={scale(5)}
-          onChangeText={text => {
-            dispatch({type: 'degreeTitle', payload: text});
-          }}
-          errorMessage={''}
-        />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <View style={{height: moderateScale(100)}} />
         <CustomTextInput
           placeholder={'Certificate Number'}
           value={certificateData.certification_no}
@@ -146,7 +144,10 @@ const AddCertificateScreen = ({navigation}) => {
             })
           }
         />
-
+        <Spacer />
+        <Spacer />
+        <Spacer />
+        <Spacer />
         <CustomButton
           loading={false}
           loadingText={'Saving'}

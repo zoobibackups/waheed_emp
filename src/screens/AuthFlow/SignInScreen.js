@@ -19,9 +19,9 @@ import {colors} from '../../constants/theme';
 import {Login} from '../../store/actions/LoginActions';
 import {commonStyles, textStyles} from '../../styles';
 const SignInScreen = ({navigation}) => {
-  const [email_address, setUseremail] = useState('niveba2588@shbiso.com'); // dr.aftabufaq@gmail.com
+  const [email_address, setUseremail] = useState('rajan13506@farebus.com'); // niveba2588@shbiso.com
   const [UseremailErrorMesage, setUseremailErrorMessaage] = useState('');
-  const [password, setPassword] = useState('123456'); //123456
+  const [password, setPassword] = useState(''); //123456
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [is_api_error, set_api_error] = useState('');
   const [apiErrorMessage, setApiErrorMessage] = useState('');
@@ -29,9 +29,6 @@ const SignInScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const userLogin = data => dispatch(Login(data));
 
-  useEffect(() => {
-    submitdate();
-  }, []);
   const submitdate = () => {
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (!reg.test(email_address.trim())) {
