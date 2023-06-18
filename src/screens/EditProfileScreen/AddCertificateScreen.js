@@ -1,34 +1,16 @@
 import axios from 'axios';
 import moment from 'moment';
-import {NativeBaseProvider, Select} from 'native-base';
-import React, {useReducer} from 'react';
-import {
-  Alert,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  View,
-} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import React, {useReducer, useState} from 'react';
+import {Alert, SafeAreaView, StatusBar, View} from 'react-native';
 import {moderateScale, scale} from 'react-native-size-matters';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {useSelector} from 'react-redux';
 import CustomButton from '../../components/Button';
 import CalenderInput from '../../components/DateInputMethod';
 import Spacer from '../../components/Spacer';
 import CustomTextInput from '../../components/TextInput';
-import {AppScreenWidth} from '../../constants/sacling';
-import {colors, fonts} from '../../constants/theme';
-import {commonStyles, selectStyles} from '../../styles';
-
+import UpLoadComponent from '../../components/Uploadcomponent';
+import {colors} from '../../constants/theme';
+import {commonStyles} from '../../styles';
 const initialState = {
   certification_id: '1',
   certification_no: '',
@@ -43,6 +25,9 @@ const initialState = {
 const AddCertificateScreen = ({navigation}) => {
   const [certificateData, dispatch] = useReducer(reducer, initialState);
   const {user, token} = useSelector(state => state.LoginReducer);
+  const [filepath, setFilePath] = useState({
+    name: '',
+  });
   function reducer(state, action) {
     switch (action.type) {
       case 'certification_no':
@@ -74,9 +59,9 @@ const AddCertificateScreen = ({navigation}) => {
       expiry_date: certificateData.expiry_date,
       account_id: user.account_id,
       upload_file: {
-        name: 'Dummy.pdf',
-        mime_type: 'application/pdf',
-        content: '',
+        name: filepath.name,
+        mime_type: `application/${filepath.ext}`,
+        content: filepath.base64,
       },
     });
 
@@ -143,6 +128,15 @@ const AddCertificateScreen = ({navigation}) => {
               payload: moment(new Date(date)).format('YYYY-MM-DD'),
             })
           }
+        />
+        <UpLoadComponent
+          is_profile_image={false}
+          title={'Upoad Certificate File'}
+          filepath={filepath.name}
+          setFilePath={file => {
+            console.log(file);
+            setFilePath(file);
+          }}
         />
         <Spacer />
         <Spacer />

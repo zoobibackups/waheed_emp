@@ -1,5 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
 import React, {useEffect, useReducer, useState} from 'react';
 import {
   Alert,
@@ -22,134 +21,17 @@ import {
 } from 'react-native-responsive-screen';
 import {scale, verticalScale} from 'react-native-size-matters';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../components/Button';
+import CreateCertificationItem from '../../components/CreateCertificationItem';
+import CreateEducationItem from '../../components/CreateEducationItem';
+import CreateExperinceItem from '../../components/CreateExperinceItem';
 import RenderHTMLComponent from '../../components/RenderHtmlText';
 import CustomTextInput from '../../components/TextInput';
-import UpLoadComponent from '../../components/Uploadcomponent';
 import {colors, fonts} from '../../constants/theme';
-import {Login, UpdateData} from '../../store/actions/LoginActions';
+import {UpdateData} from '../../store/actions/LoginActions';
 import {commonStyles, textStyles} from '../../styles';
 
-const CreateExperinceItem = ({item, index}) => {
-  return (
-    <TouchableOpacity key={`${index}`} style={styles.EducationMainView}>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Image
-          style={styles.ImageView}
-          source={require('../../assets/images/job.png')}
-        />
-      </View>
-      <View style={{marginLeft: scale(15), width: '80%'}}>
-        <Text style={styles.job_tiltetext}>{item.job_title}</Text>
-        <Text style={styles.Addresstext}>{item.job_duties}</Text>
-
-        <Text style={styles.date}>
-          {`${moment(item.experience_start_date).format('MMM YYYY')} -`}
-          {item.is_currently_working === '1'
-            ? 'Present'
-            : `${moment(item.experience_end_date).format('MMM YYYY')}`}
-          {'  •  '}
-
-          {item.is_currently_working == '1'
-            ? moment(item.experience_start_date).fromNow()
-            : moment([item.experience_start_date]).from(
-                moment([item.experience_end_date]),
-              )}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-const CreateEducationItem = ({item, index}) => {
-  return (
-    <TouchableOpacity key={`${index}`} style={styles.EducationMainView}>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Image
-          style={styles.ImageView}
-          source={require('../../assets/images/study.png')}
-        />
-      </View>
-      <View style={{marginLeft: scale(15), width: '80%'}}>
-        <Text style={styles.job_tiltetext}>{item.education_title}</Text>
-        <Text style={styles.Addresstext}>{item.education_details}</Text>
-
-        <Text style={styles.date}>
-          {`${moment(item.education_start_date).format('MMM YYYY')} - `}
-          {item.is_currently_studying === '1'
-            ? 'Present  '
-            : `${moment(item.education_end_date).format('MMM YYYY')}`}
-
-          {item.is_currently_studying === '1'
-            ? item.is_currently_studying === '1'
-              ? moment().fromNow()
-              : moment([item.education_end_date]).from(
-                  moment([item.education_start_date]),
-                )
-            : null}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const CreateCertificationItem = ({item, index}) => {
-  console.log(item);
-  return (
-    <View key={`${index}`} style={styles.EducationMainView}>
-      <View style={styles.ImageView}>
-        <FontAwesome5
-          color={colors.dark_primary_color}
-          name={'medal'}
-          size={scale(40)}
-        />
-      </View>
-      <View style={{marginLeft: scale(15), width: '80%'}}>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'middle'}
-          style={styles.job_tiltetext}>
-          {item.certificate_type}
-        </Text>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'middle'}
-          style={styles.Addresstext}>
-          {item.certification_name} - {item.certification_no}
-        </Text>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.date}>{item.expiry_date}</Text>
-          <Text style={{...styles.date, marginRight: scale(0)}}>-</Text>
-          <Text
-            style={{
-              ...styles.date,
-              color: '#fff',
-              width: 75,
-              textAlign: 'center',
-              borderRadius: 4,
-
-              marginLeft: scale(10),
-              backgroundColor: moment().isAfter(moment(item.expiry_date))
-                ? 'red'
-                : 'green',
-            }}>
-            {' '}
-            {moment().isAfter(moment(item.expiry_date)) ? 'Expire' : 'Valid'}
-          </Text>
-        </View>
-      </View>
-    </View>
-  );
-};
 ExperienceSection = ({data}) => {
   return (
     <View style={{}}>
@@ -331,7 +213,7 @@ const GeneralProfileScreen = ({navigation}) => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `https://api.recruitbpm.com/certifications`,
+      url: `https://api.recruitbpm.com/certifications?search={"candidate_id":${user.candidate_id}}`,
       headers: {
         Authorization: 'Bearer 4545980ce66bd555d903f7dc739f91e631606eb1',
       },
@@ -340,7 +222,7 @@ const GeneralProfileScreen = ({navigation}) => {
     axios
       .request(config)
       .then(response => {
-        setCertifications(response.data._embedded.Certifications.slice(0, 4));
+        setCertifications(response.data._embedded.Certifications);
       })
       .catch(error => {
         console.log(error);

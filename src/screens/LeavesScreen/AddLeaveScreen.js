@@ -1,7 +1,8 @@
 import moment from 'moment';
-import {Icon, NativeBaseProvider, Select} from 'native-base';
+import {NativeBaseProvider, Select} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,7 +20,7 @@ import ErrorModal from '../../components/ErrorModal';
 import Spacer from '../../components/Spacer';
 import SuccessModal from '../../components/SuccessModal';
 import CustomTextInput from '../../components/TextInput';
-import {AppScreenWidth, width} from '../../constants/sacling';
+import {AppScreenWidth} from '../../constants/sacling';
 import {colors, fonts} from '../../constants/theme';
 import {commonStyles, textStyles} from '../../styles';
 import selectStyles from '../../styles/selectStyles';

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {scale, verticalScale} from 'react-native-size-matters';
@@ -12,8 +11,7 @@ import {
   heightPercentageToDP,
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
-import Disk from '../assets/images/Disk.svg';
-import {colors, fonts} from '../constants/theme';
+import {colors} from '../constants/theme';
 import {textStyles} from '../styles';
 const UpLoadComponent = ({
   wdt = AppScreenWidth - scale(10),
@@ -28,12 +26,14 @@ const UpLoadComponent = ({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
     })
       .then(image => {
         setFilePath({
           path: image.path,
           name: image.path.split('/').pop(),
           ext: image.mime,
+          base64: image.data,
         });
         setIsModalVisible(false);
       })
@@ -48,12 +48,14 @@ const UpLoadComponent = ({
       width: 300,
       height: 400,
       cropping: true,
+      includeBase64: true,
     })
       .then(image => {
         setFilePath({
           path: image.path,
           name: image.path.split('/').pop(),
           ext: image.mime,
+          base64: image.data,
         });
         setIsModalVisible(false);
       })
@@ -61,25 +63,6 @@ const UpLoadComponent = ({
         console.log(err);
         setIsModalVisible(false);
       });
-  };
-
-  const pickDocument = async () => {
-    try {
-      const pickerResult = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-        copyTo: 'cachesDirectory',
-      });
-
-      setFilePath({
-        path: pickerResult.fileCopyUri,
-        name: pickerResult.name,
-        ext: pickerResult.type,
-      });
-      setIsModalVisible(false);
-    } catch (e) {
-      console.log(e);
-      setIsModalVisible(false);
-    }
   };
 
   return (
@@ -180,7 +163,7 @@ const UpLoadComponent = ({
             </Text>
           </TouchableOpacity>
 
-          {!is_profile_image && (
+          {/* {!is_profile_image && (
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={() => {
@@ -195,7 +178,7 @@ const UpLoadComponent = ({
                 Pick File
               </Text>
             </TouchableOpacity>
-          )}
+          )} */}
 
           <TouchableOpacity
             style={styles.cancel_button}
@@ -229,7 +212,7 @@ const styles = StyleSheet.create({
   textplaceholder: {
     ...textStyles.smallheading,
     fontSize: scale(12),
-    color: colors.text_primary_color,
+    color: colors.dark_primary_color,
     backgroundColor: '#0000',
 
     includeFontPadding: false,

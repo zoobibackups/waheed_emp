@@ -34,6 +34,12 @@ import AddCertificateScreen from '../screens/EditProfileScreen/AddCertificateScr
 import MyReferencesScreen from '../screens/MyReferencesScreen';
 import MyRefrerralsScreen from '../screens/MyReferralsScreen';
 
+//
+
+import EditCertificateScreen from '../screens/EditProfileScreen/EditCertificateScreen';
+import EditEucationScreen from '../screens/EditProfileScreen/EditEducationScreen';
+import EditExperienceScreen from '../screens/EditProfileScreen/EditExperienceScreen';
+
 import DrawerContent from './DrawerContent';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -54,6 +60,30 @@ const MainStack = () => {
         component={EditProfileScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="EditExperienceScreen"
+        component={EditExperienceScreen}
+        options={{
+          headerShown: true,
+          title: 'Experience Edit',
+        }}
+      />
+      <Stack.Screen
+        name="EditCertificateScreen"
+        component={EditCertificateScreen}
+        options={{
+          headerShown: true,
+          title: 'Certificate Edit',
+        }}
+      />
+      <Stack.Screen
+        name="EditEucationScreen"
+        component={EditEucationScreen}
+        options={{
+          headerShown: true,
+          title: 'Education Edit',
         }}
       />
       <Stack.Screen

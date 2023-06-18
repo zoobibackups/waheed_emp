@@ -85,10 +85,13 @@ function MyTabBar({state, descriptors, navigation, position}) {
               borderRadius: scale(100),
               justifyContent: 'center',
               width: widthPercentageToDP(23),
-              backgroundColor: '#fff',
+              backgroundColor: isFocused ? '#000' : '#fff',
             }}>
             <Animated.Text
-              style={{...textStyles.Label, color: colors.dark_primary_color}}>
+              style={{
+                ...textStyles.Label,
+                color: isFocused ? '#fff' : colors.dark_primary_color,
+              }}>
               {label}
             </Animated.Text>
           </TouchableOpacity>
@@ -115,7 +118,11 @@ const EditProfileScreen = ({navigation}) => {
             backgroundColor: '#fff',
             alignSelf: 'center',
           }}>
-          <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+          <Tab.Navigator
+            screenOptions={{
+              swipeEnabled: false,
+            }}
+            tabBar={props => <MyTabBar {...props} />}>
             <Tab.Screen
               name={'GeneralProfileScreen'}
               children={() => <GeneralProfileScreen />}

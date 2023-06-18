@@ -1,3 +1,4 @@
+import axios from 'axios';
 import moment from 'moment';
 import {NativeBaseProvider, Select} from 'native-base';
 import React, {useReducer} from 'react';
@@ -34,9 +35,8 @@ const initialState = {
   currentlyWorking: true,
   educationDetails: '',
 };
-const AddEducationScreen = ({navigation, route}) => {
-  const data = route.params.item;
-  const [educationData, dispatch] = useReducer(reducer, data);
+const AddEducationScreen = ({navigation}) => {
+  const [educationData, dispatch] = useReducer(reducer, initialState);
   const {user, token} = useSelector(state => state.LoginReducer);
   function reducer(state, action) {
     switch (action.type) {
@@ -66,7 +66,7 @@ const AddEducationScreen = ({navigation, route}) => {
     );
     myHeaders.append('Cookie', 'PHPSESSID=o6hf5ebrbakffek9jieg5fi0m4');
 
-    var raw = JSON.stringify({
+    var data = {
       candidate_id: user.candidate_id,
       education_title: educationData.degreeTitle,
       education_level: educationData.degreeLevel,
@@ -74,28 +74,24 @@ const AddEducationScreen = ({navigation, route}) => {
       education_start_date: educationData.startDate,
       education_end_date: educationData.endDate,
       is_currently_studying: educationData.currentlyWorking,
-    });
-
-    var requestOptions = {
-      method: 'PUT',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow',
     };
 
-    fetch(
-      `https://api.recruitbpm.com/education/${data.candidate_education_id}`,
-      requestOptions,
-    )
-      .then(response => response.json())
-      .then(result => {
-        if (result.status == 200) {
-          Alert.alert(result.message);
-        } else {
-          Alert.alert(
-            'THere is some issue with request. Please try agian later',
-          );
-        }
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://api.recruitbpm.com/education',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer 4545980ce66bd555d903f7dc739f91e631606eb1',
+        Cookie: 'PHPSESSID=vrp9dvjpod52nh5omdtb28gccj',
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then(response => {
+        Alert.alert(response.data.message);
       })
       .catch(error => {
         Alert.alert('THere is some issue with request. Please try agian later');
@@ -210,7 +206,7 @@ const AddEducationScreen = ({navigation, route}) => {
               onChangeText={date =>
                 dispatch({
                   type: 'startDate',
-                  payload: moment(new Date(date)).format('MMM-YYYY'),
+                  payload: moment(new Date(date)).format('YYYY-MM-DD'),
                 })
               }
             />
@@ -222,7 +218,7 @@ const AddEducationScreen = ({navigation, route}) => {
               onChangeText={date =>
                 dispatch({
                   type: 'endDate',
-                  payload: moment(new Date(date)).format('MMM-YYYY'),
+                  payload: moment(new Date(date)).format('YYYY-MM-DD'),
                 })
               }
             />
